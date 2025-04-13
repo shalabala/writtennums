@@ -8,7 +8,9 @@ class Model:
         self.parameters = {}
 
     def infer(self, input_data):
-        input_data = torch.tensor(input_data, dtype=torch.float32).unsqueeze(0)
+        input_data = torch.tensor(input_data, dtype=torch.float32)
+        input_data /= 255.0
+        input_data = input_data.unsqueeze(0).unsqueeze(0)  # Add batch and channel dimensions
         with torch.no_grad():
             output = self._model(input_data)
         return torch.max(output, dim=1).indices.item()
